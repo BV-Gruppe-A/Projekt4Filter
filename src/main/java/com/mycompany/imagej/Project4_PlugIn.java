@@ -37,17 +37,14 @@ public class Project4_PlugIn implements PlugInFilter {
     
     @Override    
     public int setup(String args, ImagePlus im) {  
-    	// this plugin accepts RGB images
+    	// this plugin accepts 8-bit greyscales
         return DOES_8G; 
     }
 
     @Override
     public void run(ImageProcessor ip) {
-        int M = ip.getWidth();
-        int N = ip.getHeight();
         
-  
-        int whichMethod = (int)IJ.getNumber("Which of the two Methods should be used? (Input: 1-2)", 1);
+        int whichMethod = (int)IJ.getNumber("Which of the four Filters should be used? (Input: 1-4)", 1);
         
         switch(whichMethod) {
         // Filter h1
@@ -74,10 +71,25 @@ public class Project4_PlugIn implements PlugInFilter {
     }
 
 	private void filter(ImageProcessor ip, double[][] filter) {
-		// TODO Auto-generated method stub
-		
+        ImageProcessor copy = ip.duplicate();
+        int M = ip.getWidth();
+        int N = ip.getHeight();
+        for (int u = 1; u < M - 1; u++) {
+	        for (int v = 1; v < N - 1; v++) {
+		        // compute filter result for position (u,v):
+		        double sum = 0;
+		        for (int i = -1; i <= 1; i++) {
+			        for (int j = -1; j <= 1; j++) {
+				        int p = copy.getPixel(u + i, v + j);
+				        // get the corresponding filter coefficient:
+				        double c = filter[j + 1][i + 1];
+				        sum = sum + c * p;
+			        }
+		        }
+	        int q = (int) Math.round(sum);
+	        ip.putPixel(u, v, q);
+	        }
+        }
 	}
-
-
 
 }
