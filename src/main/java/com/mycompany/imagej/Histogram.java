@@ -6,7 +6,7 @@ import ij.process.ImageProcessor;
 public class Histogram {
 	// Constant Values
 	final int BLACK = 0;
-	final int WHITE = 255;		//test
+	final int WHITE = 255;		
 	
 	final int GREY_MASK = 0x0000FF;
 	final int SIGMA = 10;
