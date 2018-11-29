@@ -3,36 +3,43 @@ package com.mycompany.imagej;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.filter.PlugInFilter;
-import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 
 public class Project4_PlugIn implements PlugInFilter {
     
 	final int BLACK = 0;
 	final int WHITE = 255;
+	
+	// Values for the masks
+	final double VALUE16 = 1.0 / 6.0;
+	final double VALUE_MINUS16 = -1 * VALUE16;
+	final double VALUE18 = 1.0 / 8.0;
+	final double VALUE_MINUS18 = -1 * VALUE18;
+	final double VALUE28 = 2.0 / 8.0;
+	final double VALUE_MINUS28 = -1 * VALUE28;
 	 
 	final double [][] h1 = {
-			{-1/6,-1/6,0},
-			{-1/6,0,1/6},
-			{0,1/6,1/6}
+			{VALUE_MINUS16, VALUE_MINUS16, 0},
+			{VALUE_MINUS16, 0, VALUE16},
+			{0, VALUE16, VALUE16}
 	};
 	
 	final double [][] h2 = {
-			{0,1/6,1/6},
-			{-1/6,0,1/6},
-			{-1/6,-1/6,0}
+			{0, VALUE16, VALUE16},
+			{VALUE_MINUS16, 0, VALUE16},
+			{VALUE_MINUS16, VALUE_MINUS16, 0}
 	};
 	
 	final double [][] h3 = {
-			{-2/8,-1/8,0},
-			{-1/8,0,1/8},
-			{0,1/8,2/8}
+			{VALUE_MINUS28, VALUE_MINUS18, 0},
+			{VALUE_MINUS18, 0, VALUE18},
+			{0, VALUE18, VALUE28}
 	};
 	
 	final double [][] h4 = {
-			{0,1/8,2/8},
-			{-1/8,0,1/8},
-			{-2/8,-1/8,0}
+			{0, VALUE18, VALUE28},
+			{VALUE_MINUS18, 0, VALUE18},
+			{VALUE_MINUS28, VALUE_MINUS18, 0}
 	};
     
     @Override    
@@ -49,19 +56,19 @@ public class Project4_PlugIn implements PlugInFilter {
         switch(whichMethod) {
         // Filter h1
         case 1:
-        	filter(ip,h1);
+        	filter(ip, h1);
             break;
         //Filter h2
         case 2:
-        	filter(ip,h2);
+        	filter(ip, h2);
             break;
         //Filter h3    
         case 3:
-        	filter(ip,h3);
+        	filter(ip, h3);
         	break;
         //Filter h4	
         case 4:
-        	filter(ip,h4);
+        	filter(ip, h4);
         	break;
             
         default:
@@ -74,8 +81,9 @@ public class Project4_PlugIn implements PlugInFilter {
         ImageProcessor copy = ip.duplicate();
         int M = ip.getWidth();
         int N = ip.getHeight();
-        for (int u = 1; u < M - 1; u++) {
-	        for (int v = 1; v < N - 1; v++) {
+        
+        for (int u = 1; u <= M - 2; u++) {
+	        for (int v = 1; v <= N - 2; v++) {
 		        // compute filter result for position (u,v):
 		        double sum = 0;
 		        for (int i = -1; i <= 1; i++) {
