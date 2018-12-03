@@ -110,16 +110,19 @@ public class Project4_PlugIn implements PlugInFilter {
         for (int u = 1; u <= M - 2; u++) {
 	        for (int v = 1; v <= N - 2; v++) {
 		        // compute filter result for position (u,v):
-		        double sum = 0;
+		        double sum1 = 0;
+		        double sum2 = 0;
 		        for (int i = -1; i <= 1; i++) {
 			        for (int j = -1; j <= 1; j++) {
 				        int p = copy.getPixel(u + i, v + j);
 				        // get the corresponding filter coefficient:
-				        double c = Math.sqrt(Math.pow(filter1[j + 1][i + 1],2)+Math.pow(filter2[j + 1][i + 1],2));
-				        sum = sum + c * p;
+				        double c1 = filter1[j + 1][i + 1];
+				        double c2 = filter2[j + 1][i + 1];
+				        sum1 = sum1 + c1 * p;
+				        sum2 = sum2 + c2 * p;
 			        }
 		        }
-	        int q = (int) Math.round(sum);
+	        int q = (int) Math.round(Math.sqrt(Math.pow(sum1, 2)+Math.pow(sum2, 2)));
 	        ip.putPixel(u, v, q);
 	        }
         }
