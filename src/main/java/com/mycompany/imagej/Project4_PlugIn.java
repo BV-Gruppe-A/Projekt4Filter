@@ -51,7 +51,7 @@ public class Project4_PlugIn implements PlugInFilter {
     @Override
     public void run(ImageProcessor ip) {
         
-        int whichMethod = (int)IJ.getNumber("Which of the four Filters should be used? (Input: 1-4)", 1);
+        int whichMethod = (int)IJ.getNumber("Which of the four Filters should be used? (Input: 1-5)", 1);
         
         switch(whichMethod) {
         // Filter h1
@@ -69,6 +69,9 @@ public class Project4_PlugIn implements PlugInFilter {
         //Filter h4	
         case 4:
         	filter(ip, h4);
+        	break;
+        case 5:
+        	filter2(ip, h1, h2);
         	break;
             
         default:
@@ -91,6 +94,28 @@ public class Project4_PlugIn implements PlugInFilter {
 				        int p = copy.getPixel(u + i, v + j);
 				        // get the corresponding filter coefficient:
 				        double c = filter[j + 1][i + 1];
+				        sum = sum + c * p;
+			        }
+		        }
+	        int q = (int) Math.round(sum);
+	        ip.putPixel(u, v, q);
+	        }
+        }
+	}
+	private void filter2(ImageProcessor ip, double[][] filter1, double[][] filter2) {
+        ImageProcessor copy = ip.duplicate();
+        int M = ip.getWidth();
+        int N = ip.getHeight();
+        
+        for (int u = 1; u <= M - 2; u++) {
+	        for (int v = 1; v <= N - 2; v++) {
+		        // compute filter result for position (u,v):
+		        double sum = 0;
+		        for (int i = -1; i <= 1; i++) {
+			        for (int j = -1; j <= 1; j++) {
+				        int p = copy.getPixel(u + i, v + j);
+				        // get the corresponding filter coefficient:
+				        double c = Math.sqrt(Math.pow(filter1[j + 1][i + 1],2)+Math.pow(filter2[j + 1][i + 1],2));
 				        sum = sum + c * p;
 			        }
 		        }
