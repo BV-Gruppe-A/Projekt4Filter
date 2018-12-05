@@ -51,7 +51,7 @@ public class Project4_PlugIn implements PlugInFilter {
     @Override
     public void run(ImageProcessor ip) {
         
-        int whichMethod = (int)IJ.getNumber("Which of the four Filters should be used? (Input: 1-5)", 1);
+        int whichMethod = (int)IJ.getNumber("Which of the four Filters or combinations should be used? (Input: 1-6)", 1);
         
         switch(whichMethod) {
         // Filter h1
@@ -72,6 +72,9 @@ public class Project4_PlugIn implements PlugInFilter {
         	break;
         case 5:
         	filter2(ip, h1, h2);
+        	break;
+        case 6:
+        	filter2(ip, h3, h4);
         	break;
             
         default:
